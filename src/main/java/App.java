@@ -2,24 +2,33 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class App {
-    Client client;
 
-    public App(Client client, ConsoleEventLogger eventlogger) {
-        this.client = client;
-        this.eventlogger = eventlogger;
-    }
+    private Client client;
 
-    ConsoleEventLogger eventlogger;
+    private EventLogger eventLogger;
+
     public static void main(String[] args) {
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
-        App app = (App)ctx.getBean("app");
-        app.logEvent("Some event for user 1");
-        app.logEvent("Some event for user 2");
+        @SuppressWarnings("resource")           // We will remove this suppress in further lessons
+                ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        App app = (App) ctx.getBean("app");
+
+        Event event = ctx.getBean(Event.class); //нахождение по классу
+        app.logEvent(event, "Some event for 1");
+
+        event = ctx.getBean(Event.class);
+        app.logEvent(event, "Some event for 2");
     }
 
-    private void logEvent(String msg){
-        String message = msg.replaceAll(client.getId(), client.getFullname());
-        eventlogger.logEvent(message);
+    public App(Client client, EventLogger eventLogger) {
+        super();
+        this.client = client;
+        this.eventLogger = eventLogger;
+    }
+
+    private void logEvent(Event event, String msg) {
+        String message = msg.replaceAll(client.getId(), client.getFullName());
+        event.setMsg(message);
+        eventLogger.logEvent(event);
     }
 
 }

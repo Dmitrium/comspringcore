@@ -1,11 +1,10 @@
-
 public class Client {
     String id;
     String fullname;
 
-    public Client(String s, String s1) {
-        id = s;
-        fullname = s1;
+    public Client(String id, String fullname) {
+        this.id = id;
+        this.fullname = fullname;
     }
 
     public String getId() {
@@ -16,7 +15,7 @@ public class Client {
         this.id = id;
     }
 
-    public String getFullname() {
+    public String getFullName() {
         return fullname;
     }
 
