@@ -19,15 +19,23 @@
         </constructor-arg>
         <constructor-arg ref="dateFormat"/>
     </bean>
+
         <bean id="dateFormat" class="java.text.DateFormat"
               factory-method="getDateTimeInstance"/>
-    <bean id="fileEventLogger" class="FileEventLogger" init-method="init"><!--может возвратить чтото или бросить Exception-->
+
+    <bean id="fileEventLogger" class="FileEventLogger" init-method="init"><!--может возвратить чтото или бросить Exception, не может принимать аршументы-->
     <constructor-arg value="target/events_log.txt"/>
     </bean>
+
     <bean id="eventLogger" class="ConsoleEventLogger"/>
+
+    <bean id="cacheFileEventLogger" class="CacheFileEventLogger" destroy-method="destroy" init-method="init">     <!--метод выполнится при закрытии контекста-->
+        <constructor-arg value="target/events_log.txt"/>
+        <constructor-arg value="3"/>
+    </bean>
 
     <bean id="app" class="App">
     <constructor-arg ref="client"/>
-    <constructor-arg ref="fileEventLogger"/>
+    <constructor-arg ref="cacheFileEventLogger"/>
     </bean>
 </beans>
