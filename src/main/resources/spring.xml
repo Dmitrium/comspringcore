@@ -5,33 +5,10 @@
  		http://www.springframework.org/schema/beans
  		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
+    <import resource="loggers.xml"/>
     <bean id="client" class="Client" scope="singleton"> <!--синглтон по умолчанию-->
         <constructor-arg index="0" value="1"/>
         <constructor-arg index="1" value="John Smith"/>
-    </bean>
-    <!-- есть еще 3 scope для web
-     request - новый бин на время обработки запроса
-     session - пока есть http сессия
-     global-session - погка есть глбальная http сессия-->
-    <bean id="event" class="Event" scope="prototype">   <!--каждый раз новый объект-->
-        <constructor-arg>
-            <bean class="java.util.Date"/>
-        </constructor-arg>
-        <constructor-arg ref="dateFormat"/>
-    </bean>
-
-        <bean id="dateFormat" class="java.text.DateFormat"
-              factory-method="getDateTimeInstance"/>
-
-    <bean id="fileEventLogger" class="FileEventLogger" init-method="init"><!--может возвратить чтото или бросить Exception, не может принимать аршументы-->
-    <constructor-arg value="target/events_log.txt"/>
-    </bean>
-
-    <bean id="eventLogger" class="ConsoleEventLogger"/>
-
-    <bean id="cacheFileEventLogger" class="CacheFileEventLogger" destroy-method="destroy" init-method="init">     <!--метод выполнится при закрытии контекста-->
-        <constructor-arg value="target/events_log.txt"/>
-        <constructor-arg value="3"/>
     </bean>
 
     <bean id="app" class="App">

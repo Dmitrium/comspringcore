@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+    <!-- есть еще 3 scope для web
+    request - новый бин на время обработки запроса
+    session - пока есть http сессия
+    global-session - погка есть глбальная http сессия-->
+    <bean id="event" class="Event" scope="prototype">   <!--каждый раз новый объект-->
+        <constructor-arg>
+            <bean class="java.util.Date"/>
+        </constructor-arg>
+        <constructor-arg ref="dateFormat"/>
+    </bean>
+
+    <bean id="dateFormat" class="java.text.DateFormat"
+          factory-method="getDateTimeInstance"/>
+
+    <bean id="fileEventLogger" class="FileEventLogger" init-method="init"><!--может возвратить чтото или бросить Exception, не может принимать аршументы-->
+        <constructor-arg value="target/events_log.txt"/>
+    </bean>
+    <!--depends-on="app"    -  инициалтзация после бина app-->
+    <!--lazy-init="true"    -  бин не будет создан пока не будет запрошен getBean-->
+    <bean id="eventLogger" class="ConsoleEventLogger"/>
+
+    <bean id="cacheFileEventLogger" class="CacheFileEventLogger" destroy-method="destroy" parent="fileEventLogger">     <!--метод выполнится при закрытии контекста, наследование-->
+        <constructor-arg value="3"/>
+    </bean>
+</beans>
