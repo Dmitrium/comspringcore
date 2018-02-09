@@ -23,9 +23,18 @@
     </bean>
     <!--depends-on="app"    -  инициалтзация после бина app-->
     <!--lazy-init="true"    -  бин не будет создан пока не будет запрошен getBean-->
-    <bean id="eventLogger" class="ConsoleEventLogger"/>
+    <bean id="consoleEventLogger" class="ConsoleEventLogger"/>
 
     <bean id="cacheFileEventLogger" class="CacheFileEventLogger" destroy-method="destroy" parent="fileEventLogger">     <!--метод выполнится при закрытии контекста, наследование-->
         <constructor-arg value="3"/>
+    </bean>
+
+    <bean id="combinedEventLogger" class="CombinedEventLogger">
+        <constructor-arg>
+            <list>
+                <ref bean="consoleEventLogger"/>
+                <ref bean="fileEventLogger"/>
+            </list>
+        </constructor-arg>
     </bean>
 </beans>

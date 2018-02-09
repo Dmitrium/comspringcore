@@ -14,7 +14,6 @@ public class Event {
 
     public Event(Date date, DateFormat df) {
         this.id = AUTO_ID.getAndIncrement();
-
         this.date = date;
         this.dateFormat = df;
     }
